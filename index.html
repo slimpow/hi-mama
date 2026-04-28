@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Mornings with Mom</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background: #fffaf5;
+      padding: 40px;
+    }
+    h1 {
+      font-size: 26px;
+      margin-bottom: 30px;
+    }
+    button {
+      font-size: 20px;
+      padding: 15px 25px;
+      border-radius: 10px;
+      border: none;
+      background-color: #ffb6a3;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Tap to hear a random morning with her 💛</h1>
+
+<button onclick="playRandom()">Play</button>
+
+<audio id="player"></audio>
+
+<script>
+  const clips = [
+    "PASTE_LINK_1_HERE",
+    "PASTE_LINK_2_HERE",
+    "PASTE_LINK_3_HERE"
+  ];
+
+  function playRandom() {
+    const randomClip = clips[Math.floor(Math.random() * clips.length)];
+    const player = document.getElementById("player");
+    player.src = randomClip;
+    player.play();
+  }
+</script>
+
+</body>
+</html>
