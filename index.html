@@ -33,16 +33,13 @@
 <audio id="player"></audio>
 
 <script>
-  const clips = [
-    "https://drive.google.com/uc?export=download&id=1JySnwhM1bQ9hmxrwMr5FIcRu9S_HGBRk"
-  ];
+function playRandom() {
+  alert("button works");
 
-  function playRandom() {
-    const randomClip = clips[Math.floor(Math.random() * clips.length)];
-    const player = document.getElementById("player");
-    player.src = randomClip;
-    player.play();
-  }
+  const player = document.getElementById("player");
+  player.src = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3";
+  player.play();
+}
 </script>
 
 </body>
