@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Mornings with Mom</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+      background: linear-gradient(to bottom, #fffaf5, #ffffff);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      text-align: center;
+      color: #333;
+    }
+
+    .container {
+      max-width: 320px;
+      padding: 20px;
+    }
+
+    h1 {
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+
+    p {
+      font-size: 16px;
+      opacity: 0.7;
+      margin-bottom: 40px;
+    }
+
+    .circle {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      background: #ffb6a3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto;
+      font-size: 18px;
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      transition: transform 0.1s ease, box-shadow 0.1s ease;
+    }
+
+    .circle:active {
+      transform: scale(0.95);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    .status {
+      margin-top: 30px;
+      font-size: 14px;
+      opacity: 0.6;
+      height: 20px;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+  <h1>Mornings with her 💛</h1>
+  <p>Tap to hear a moment</p>
+
+  <div class="circle" onclick="playClip()">Play</div>
+
+  <div class="status" id="statusText"></div>
+</div>
+
+<audio id="player"></audio>
+
+<script>
+  const clips = [
+    "https://slimpow.github.io/hi-mama/neira-hi.mp3",
+    "https://slimpow.github.io/hi-mama/hello.mp3",
+    "https://slimpow.github.io/hi-mama/woofwoof.mp3",
+    "https://slimpow.github.io/hi-mama/ohhhh.mp3",
+    "https://slimpow.github.io/hi-mama/book.mp3",
+    "https://slimpow.github.io/hi-mama/yodel.mp3",
+    "https://slimpow.github.io/hi-mama/yoto.mp3"
+  ];
+
+  let lastIndex = -1;
+
+  function playClip() {
+    const player = document.getElementById("player");
+    const status = document.getElementById("statusText");
+
+    let index;
+    do {
+      index = Math.floor(Math.random() * clips.length);
+    } while (clips.length > 1 && index === lastIndex);
+
+    lastIndex = index;
+
+    const clip = clips[index];
+
+    status.innerText = "playing…";
+
+    player.src = clip;
+    player.load();
+
+    player.play().then(() => {
+      status.innerText = "";
+    }).catch(() => {
+      status.innerText = "tap again to play";
+    });
+  }
+</script>
+
+</body>
+</html>
