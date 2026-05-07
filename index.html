@@ -60,6 +60,23 @@
       opacity: 0.6;
       height: 20px;
     }
+
+    .sound-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+      margin-top: 24px;
+    }
+
+    .sound-links a {
+      border: 1px solid rgba(255, 182, 163, 0.9);
+      border-radius: 999px;
+      color: #9c4f42;
+      font-size: 13px;
+      padding: 6px 10px;
+      text-decoration: none;
+    }
   </style>
 </head>
 
@@ -72,40 +89,80 @@
   <div class="circle" onclick="playClip()">Play</div>
 
   <div class="status" id="statusText"></div>
+  <div class="sound-links" id="soundLinks"></div>
 </div>
 
 <audio id="player"></audio>
 
 <script>
   const clips = [
-    "https://slimpow.github.io/hi-mama/neira-hi.mp3",
-    "https://slimpow.github.io/hi-mama/hello.mp3",
-    "https://slimpow.github.io/hi-mama/woofwoof.mp3",
-    "https://slimpow.github.io/hi-mama/ohhhh.mp3",
-    "https://slimpow.github.io/hi-mama/book.mp3",
-    "https://slimpow.github.io/hi-mama/yodel.mp3",
-    "https://slimpow.github.io/hi-mama/yoto.mp3"
+    { id: "neira-hi", label: "Neira hi", src: "https://slimpow.github.io/hi-mama/neira-hi.mp3" },
+    { id: "hello", label: "Hello", src: "https://slimpow.github.io/hi-mama/hello.mp3" },
+    { id: "woofwoof", label: "Woof woof", src: "https://slimpow.github.io/hi-mama/woofwoof.mp3" },
+    { id: "ohhhh", label: "Ohhhh", src: "https://slimpow.github.io/hi-mama/ohhhh.mp3" },
+    { id: "book", label: "Book", src: "https://slimpow.github.io/hi-mama/book.mp3" },
+    { id: "yodel", label: "Yodel", src: "https://slimpow.github.io/hi-mama/yodel.mp3" },
+    { id: "yoto", label: "Yoto", src: "https://slimpow.github.io/hi-mama/yoto.mp3" }
   ];
 
-  let lastIndex = -1;
+  const params = new URLSearchParams(window.location.search);
+  const selectedSoundId = params.get("sound");
+  const selectedClip = clips.find((clip) => clip.id === selectedSoundId);
+  let shuffledClipQueue = [];
+  let lastPlayedClipId = "";
+
+  function shuffleClips() {
+    const shuffled = [...clips];
+
+    for (let index = shuffled.length - 1; index > 0; index--) {
+      const randomIndex = Math.floor(Math.random() * (index + 1));
+      [shuffled[index], shuffled[randomIndex]] = [shuffled[randomIndex], shuffled[index]];
+    }
+
+    if (shuffled.length > 1 && shuffled[0].id === lastPlayedClipId) {
+      [shuffled[0], shuffled[1]] = [shuffled[1], shuffled[0]];
+    }
+
+    return shuffled;
+  }
+
+  function nextRandomClip() {
+    if (shuffledClipQueue.length === 0) {
+      shuffledClipQueue = shuffleClips();
+    }
+
+    return shuffledClipQueue.shift();
+  }
+
+  function renderSoundLinks() {
+    const links = document.getElementById("soundLinks");
+    const baseUrl = `${window.location.origin}${window.location.pathname}`;
+
+    if (selectedClip) {
+      const allSoundsLink = document.createElement("a");
+      allSoundsLink.href = baseUrl;
+      allSoundsLink.innerText = "All sounds";
+      links.appendChild(allSoundsLink);
+    }
+
+    clips.forEach((clip) => {
+      const link = document.createElement("a");
+      link.href = `${baseUrl}?sound=${encodeURIComponent(clip.id)}`;
+      link.innerText = clip.label;
+      links.appendChild(link);
+    });
+  }
 
   function playClip() {
     const player = document.getElementById("player");
     const status = document.getElementById("statusText");
-
-    let index;
-    do {
-      index = Math.floor(Math.random() * clips.length);
-    } while (clips.length > 1 && index === lastIndex);
-
-    lastIndex = index;
-
-    const clip = clips[index];
+    const clip = selectedClip || nextRandomClip();
 
     status.innerText = "playing…";
 
-    player.src = clip;
+    player.src = clip.src;
     player.load();
+    lastPlayedClipId = clip.id;
 
     player.play().then(() => {
       status.innerText = "";
@@ -113,6 +170,12 @@
       status.innerText = "tap again to play";
     });
   }
+
+  if (selectedClip) {
+    document.querySelector("p").innerText = `Tap to hear ${selectedClip.label}`;
+  }
+
+  renderSoundLinks();
 </script>
 
 </body>
