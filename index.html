@@ -102,12 +102,26 @@
     { id: "ohhhh", label: "Ohhhh", src: "https://slimpow.github.io/hi-mama/ohhhh.mp3" },
     { id: "book", label: "Book", src: "https://slimpow.github.io/hi-mama/book.mp3" },
     { id: "yodel", label: "Yodel", src: "https://slimpow.github.io/hi-mama/yodel.mp3" },
-    { id: "yoto", label: "Yoto", src: "https://slimpow.github.io/hi-mama/yoto.mp3" }
+    { id: "yoto", label: "Yoto", src: "https://slimpow.github.io/hi-mama/yoto.mp3" },
+    { id: "ok", label: "Ok", src: "https://slimpow.github.io/hi-mama/ok.mp3" }
   ];
 
+  const qrSlots = {
+    "1": "neira-hi",
+    "2": "hello",
+    "3": "woofwoof",
+    "4": "ohhhh",
+    "5": "book",
+    "6": "yodel",
+    "7": "yoto",
+    "8": "ok"
+  };
+
   const params = new URLSearchParams(window.location.search);
+  const selectedQrSlot = params.get("qr");
+  const selectedQrSoundId = qrSlots[selectedQrSlot];
   const selectedSoundId = params.get("sound");
-  const selectedClip = clips.find((clip) => clip.id === selectedSoundId);
+  const selectedClip = clips.find((clip) => clip.id === (selectedQrSoundId || selectedSoundId));
   let shuffledClipQueue = [];
   let lastPlayedClipId = "";
 
