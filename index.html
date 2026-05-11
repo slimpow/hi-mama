@@ -191,6 +191,13 @@
     document.querySelector("p").innerText = `Tap to hear ${selectedClip.label}`;
   }
 
+  document.addEventListener("keydown", (event) => {
+    if (event.code === "Space" && !event.repeat) {
+      event.preventDefault();
+      playClip();
+    }
+  });
+
   renderSoundLinks();
 </script>
 
